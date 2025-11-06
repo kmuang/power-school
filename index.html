@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Power School</title> 
+  <link rel="shortcut icon" href="img/logo.png" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-between p-6">
+
+  <div class="bg-white shadow-lg rounded-xl w-full max-w-3xl p-6 mb-6">
+    <h1 class="text-2xl font-bold text-center text-indigo-600 mb-6">Student Academic Report</h1>
+
+    <!-- Student Selector -->
+    <div class="mb-6 text-center">
+      <label for="studentSelect" class="block mb-2 text-gray-700 font-medium">Select Student:</label>
+      <select id="studentSelect" class="border rounded-md p-2 w-1/2 text-center focus:ring focus:ring-indigo-300">
+      </select>
+    </div>
+
+    <div class="border-b pb-4 mb-4">
+      <h2 id="studentName" class="text-xl font-semibold">Student: Ethan Hughes</h2>
+      <p id="studentGrade" class="text-gray-600">Grade: 11</p>
+      <p class="text-gray-600">GPA: <span id="gpa" class="font-medium text-indigo-600">3.5</span></p>
+      <p class="text-gray-600">Attendance: <span id="attendance" class="text-green-600 font-medium">95%</span></p>
+      <p class="text-gray-600">Tardy: <span id="tardy" class="text-yellow-600 font-medium">3 Days</span></p>
+    </div>
+
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-indigo-600 text-white">
+          <th class="p-3 rounded-tl-lg">Subject</th>
+          <th class="p-3">Grade</th>
+          <th class="p-3 rounded-tr-lg">Letter</th>
+        </tr>
+      </thead>
+      <tbody id="subjectTable" class="divide-y divide-gray-200">
+        <!-- Subjects will populate dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="w-full max-w-3xl text-center text-gray-500 border-t pt-4 text-sm">
+    <p>&copy; <span id="year"></span> PowerSchool Grade Management</p>
+  </footer>
+
+  <script>
+    const students = [
+      {
+        id: 'S001',
+        name: 'Ethan Hughes',
+        grade: 11,
+        gpa: 3.5,
+        attendance: 95,
+        tardy: 3,
+        subjects: [
+          { name: 'Math', grade: 90, letter: 'A' },
+          { name: 'English', grade: 85, letter: 'B' },
+          { name: 'Biology', grade: 78, letter: 'C' },
+          { name: 'History', grade: 92, letter: 'A' },
+          { name: 'Spanish', grade: 88, letter: 'B' },
+          { name: 'Computer Science', grade: 95, letter: 'A' }
+        ]
+      },
+      {
+        id: 'S002',
+        name: 'Ava Thompson',
+        grade: 12,
+        gpa: 3.9,
+        attendance: 98,
+        tardy: 1,
+        subjects: [
+          { name: 'Math', grade: 96, letter: 'A' },
+          { name: 'English', grade: 93, letter: 'A' },
+          { name: 'Physics', grade: 88, letter: 'B' },
+          { name: 'History', grade: 90, letter: 'A' },
+          { name: 'French', grade: 94, letter: 'A' },
+          { name: 'Art', grade: 97, letter: 'A' }
+        ]
+      },
+      {
+        id: 'S003',
+        name: 'Liam Anderson',
+        grade: 10,
+        gpa: 3.2,
+        attendance: 90,
+        tardy: 5,
+        subjects: [
+          { name: 'Math', grade: 82, letter: 'B' },
+          { name: 'English', grade: 74, letter: 'C' },
+          { name: 'Chemistry', grade: 79, letter: 'C' },
+          { name: 'Geography', grade: 85, letter: 'B' },
+          { name: 'Spanish', grade: 77, letter: 'C' },
+          { name: 'PE', grade: 95, letter: 'A' }
+        ]
+      },
+      {
+        id: 'S004',
+        name: 'Sophia Martinez',
+        grade: 9,
+        gpa: 3.8,
+        attendance: 97,
+        tardy: 2,
+        subjects: [
+          { name: 'Math', grade: 91, letter: 'A' },
+          { name: 'English', grade: 89, letter: 'B' },
+          { name: 'Biology', grade: 93, letter: 'A' },
+          { name: 'History', grade: 90, letter: 'A' },
+          { name: 'Spanish', grade: 92, letter: 'A' },
+          { name: 'Music', grade: 96, letter: 'A' }
+        ]
+      },
+      {
+        id: 'S005',
+        name: 'Oliver Brown',
+        grade: 12,
+        gpa: 3.4,
+        attendance: 92,
+        tardy: 4,
+        subjects: [
+          { name: 'Math', grade: 84, letter: 'B' },
+          { name: 'English', grade: 79, letter: 'C' },
+          { name: 'Physics', grade: 87, letter: 'B' },
+          { name: 'Economics', grade: 88, letter: 'B' },
+          { name: 'Computer Science', grade: 90, letter: 'A' },
+          { name: 'Art', grade: 85, letter: 'B' }
+        ]
+      }
+    ];
+
+    const select = document.getElementById('studentSelect');
+    const tbody = document.getElementById('subjectTable');
+
+    // Populate dropdown
+    students.forEach(student => {
+      const option = document.createElement('option');
+      option.value = student.id;
+      option.textContent = student.name;
+      select.appendChild(option);
+    });
+
+    function displayStudent(student) {
+      document.getElementById('studentName').textContent = `Student: ${student.name}`;
+      document.getElementById('studentGrade').textContent = `Grade: ${student.grade}`;
+      document.getElementById('gpa').textContent = student.gpa;
+      document.getElementById('attendance').textContent = `${student.attendance}%`;
+      document.getElementById('tardy').textContent = `${student.tardy} Days`;
+
+      tbody.innerHTML = '';
+      student.subjects.forEach(sub => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class='p-3'>${sub.name}</td>
+          <td class='p-3'>${sub.grade}%</td>
+          <td class='p-3 font-semibold ${sub.letter === 'A' ? 'text-green-600' : sub.letter === 'B' ? 'text-blue-600' : sub.letter === 'C' ? 'text-yellow-600' : 'text-red-600'}'>${sub.letter}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Default display
+    displayStudent(students[0]);
+
+    // Dropdown change listener
+    select.addEventListener('change', e => {
+      const selected = students.find(s => s.id === e.target.value);
+      if (selected) displayStudent(selected);
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
